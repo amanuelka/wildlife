@@ -1,12 +1,24 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 
-// TODO add user properties and validation according to assignment
 const userSchema = new Schema({
-    username: { type: String, required: true, unique: true, minlength: [3, 'Username must be at least 3 characters long'] },
-    hashedPassword: { type: String, required: true }
+    firstName: {
+        type: String,
+        required: true,
+        minlength: [3, 'First name must be at least 3 characters long'],
+        match: [/^[A-Za-z]+$/i, 'First name can contain only Latin letters']
+    },
+    lastName: {
+        type: String,
+        required: true,
+        minlength: [5, 'Last name must be at least 5 characters long'],
+        match: [/^[A-Za-z]+$/i, 'Last name can contain only Latin letters']
+    },
+    email: { type: String, required: true, unique: true },
+    hashedPassword: { type: String, required: true },
+    posts: { type: [Types.ObjectId], ref: 'Post' }
 });
 
-userSchema.index({ username: 1, }, {
+userSchema.index({ email: 1, }, {
     collation: {
         locale: 'en',
         strength: 2

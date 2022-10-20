@@ -1,11 +1,11 @@
 const homeController = require('express').Router();
 
-// TODO: replace with real controller by assignment
 homeController.get('/', (req, res) => {
-    res.render('home', {
-        title: 'Home Page',
-        user: req.user
-    })
+    res.render('home', { user: req.user });
+});
+
+homeController.get('/posts', (req, res) => {
+    res.render('all-posts', { user: req.user });
 });
 
 module.exports = homeController;
