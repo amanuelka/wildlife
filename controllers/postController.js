@@ -56,7 +56,7 @@ postController.get('/:id/delete', hasUser(), preloader(), isOwner(), async (req,
     res.redirect('/posts');
 });
 
-postController.get('/:id/vote/:rate', preloader(), async (req, res) => {
+postController.get('/:id/vote/:rate', hasUser(), preloader(), async (req, res) => {
     const post = res.locals.post;
     if (post.author.toString() != req.user._id.toString() &&
         post.votes.map(v => v.toString()).includes(req.user._id.toString()) == false) {
