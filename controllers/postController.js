@@ -3,7 +3,6 @@ const { hasUser, isOwner } = require('../middlewares/guards');
 const { create, update, deleteById, vote } = require('../services/postService');
 const { addPost } = require('../services/userService');
 const preloader = require('../middlewares/preloader');
-const Post = require('../models/Post');
 
 const postController = require('express').Router();
 

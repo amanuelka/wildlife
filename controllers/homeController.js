@@ -1,4 +1,5 @@
 const { getAll } = require('../services/postService');
+const { getPopulatedUser } = require('../services/userService');
 
 const homeController = require('express').Router();
 
@@ -11,8 +12,10 @@ homeController.get('/posts', async (req, res) => {
     res.render('all-posts', { posts });
 });
 
-homeController.get('/404', (req, res) => {
-    res.render('404');
+homeController.get('/profile', async (req, res) => {
+    const user = await getPopulatedUser(req.user._id);
+    const posts = user.posts;
+    res.render('my-posts', { posts });
 });
 
 module.exports = homeController;

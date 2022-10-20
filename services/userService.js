@@ -49,9 +49,14 @@ async function addPost(postId, userId) {
     return await user.save();
 };
 
+async function getPopulatedUser(id) {
+    return User.findById(id).populate('posts').lean();
+}
+
 module.exports = {
     register,
     login,
     verifyToken,
-    addPost
+    addPost,
+    getPopulatedUser
 }
