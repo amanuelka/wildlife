@@ -6,4 +6,5 @@ module.exports = (app) => {
     app.use('/', homeController);
     app.use('/auth', authController);
     app.use('/post', postController);
+    app.use('*', (req, res) => { res.render('404'); });
 };
