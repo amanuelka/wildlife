@@ -1,6 +1,6 @@
-const { parseError } = require('../util/parser');
+const { parseError, postViewModel } = require('../util/parser');
 const { hasUser, isOwner } = require('../middlewares/guards');
-const { create, update, deleteById, vote } = require('../services/postService');
+const { create, update, deleteById, vote, getByIdNoLean } = require('../services/postService');
 const { addPost } = require('../services/userService');
 const preloader = require('../middlewares/preloader');
 
@@ -24,12 +24,12 @@ postController.post('/create', hasUser(), async (req, res) => {
     }
 });
 
-postController.get('/:id', preloader(true), async (req, res) => {
-    const post = res.locals.post;
+postController.get('/:id', async (req, res) => {
+    const post = postViewModel(await getByIdNoLean(req.params.id));
 
     if (req.user) {
-        post.isAuthor = post.author.toString() == req.user._id.toString();
-        post.voted = post.votes.map(x => x.toString()).includes(req.user._id.toString());
+        post.isAuthor = post.author._id == req.user._id;
+        post.voted = post.votes.find(v => v._id == req.user._id) != undefined;
     }
 
     res.render('details', { ...post });
@@ -56,13 +56,15 @@ postController.get('/:id/delete', hasUser(), preloader(), isOwner(), async (req,
     res.redirect('/posts');
 });
 
-postController.get('/:id/vote/:rate', hasUser(), preloader(), async (req, res) => {
-    const post = res.locals.post;
-    if (post.author.toString() != req.user._id.toString() &&
-        post.votes.map(v => v.toString()).includes(req.user._id.toString()) == false) {
-        await vote(post, req.user._id, req.params.rate);
+postController.get('/:id/vote/:rate', hasUser(), async (req, res) => {
+    const rate = req.params.rate == 'up' ? 1 : -1;
+    const post = postViewModel(await getByIdNoLean(req.params.id));
+
+    if (post.author._id != req.user._id && post.votes.find(v => v._id == req.user._id) == undefined) {
+        await vote(req.params.id, req.user._id, rate);
     }
     res.redirect(`/post/${req.params.id}`);
 });
+
 
 module.exports = postController;

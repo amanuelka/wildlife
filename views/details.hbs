@@ -5,7 +5,7 @@
             <div class="card_datails">
 
                 <h1>Title: {{title}}</h1>
-                <h3>Created by an author: {{author}}</h3>
+                <h3>Created by an author: {{author.firstName}} {{author.lastName}}</h3>
                 <div class="card_animal">
                     <p class="card-keyword">Keyword: {{keyword}}</p>
                     <p class="card-location">Location: {{location}}</p>
@@ -48,7 +48,7 @@
                     </div>
                     <!-- If there are already people who have cast their vote for the post, separate their emails with a comma and a space ", " -->
                     {{#if votes}}
-                        <p class="disc">People who voted for the post - {{votes}}</p>
+                        <p class="disc">People who voted for the post - {{#each votes}}{{email}} {{/each}}</p>
                     {{else}}
                         <p class="disc">People who voted for the post - No one has voted yet.</p>
                     {{/if}}

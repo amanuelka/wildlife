@@ -1,5 +1,4 @@
 const Post = require('../models/Post');
-const User = require('../models/User');
 
 async function create(post) {
     return Post.create(post);
@@ -14,7 +13,7 @@ async function getById(id) {
 };
 
 async function getByIdNoLean(id) {
-    return Post.findById(id);
+    return Post.findById(id).populate('author', 'firstName lastName').populate('votes', 'email');
 };
 
 async function update(post, data) {
@@ -26,14 +25,15 @@ async function deleteById(id) {
     return Post.findByIdAndDelete(id);
 };
 
-async function vote(post, userId, rate) {
+async function vote(postId, userId, rate) {
+    const post = await Post.findById(postId);
     post.votes.push(userId);
-    if (rate == 'up') {
-        post.rating++;
-    } else if (rate == 'down') {
-        post.rating--;
-    }
+    post.rating += rate;
     return post.save();
+};
+
+async function getOwn(userId) {
+    return Post.find({ author: userId }).populate('author', 'firstName lastName');
 }
 
 module.exports = {
@@ -43,5 +43,6 @@ module.exports = {
     getByIdNoLean,
     update,
     deleteById,
-    vote
+    vote,
+    getOwn
 };
