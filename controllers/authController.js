@@ -1,5 +1,5 @@
 const validator = require('validator');
-const { isGuest } = require('../middlewares/guards');
+const { isGuest, hasUser } = require('../middlewares/guards');
 const { parseError } = require('../middlewares/parser');
 const { register, login } = require('../services/userService');
 
@@ -11,7 +11,7 @@ authController.get('/register', isGuest(), (req, res) => {
 
 authController.post('/register', isGuest(), async (req, res) => {
     try {
-        if (req.body.firstName == '' || req.body.lastName == '' || req.body.email == '') {
+        if (Object.values(req.body).some(v => !v)) {
             throw new Error('All fields are required');
         }
         if (validator.isEmail(req.body.email) == false) {
@@ -53,16 +53,11 @@ authController.post('/login', isGuest(), async (req, res) => {
     }
     catch (error) {
         const errors = parseError(error);
-        res.render('login', {
-            errors,
-            body: {
-                email: req.body.email
-            }
-        });
+        res.render('login', { errors, body: { email: req.body.email } });
     }
 });
 
-authController.get('/logout', (req, res) => {
+authController.get('/logout', hasUser(), (req, res) => {
     res.clearCookie('token');
     res.redirect('/');
 })

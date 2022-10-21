@@ -29,8 +29,4 @@ function isOwner() {
     }
 }
 
-module.exports = {
-    hasUser,
-    isGuest,
-    isOwner
-}
+module.exports = { hasUser, isGuest, isOwner }

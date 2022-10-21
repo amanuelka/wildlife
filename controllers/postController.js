@@ -1,7 +1,7 @@
 const { parseError, postViewModel } = require('../middlewares/parser');
 const { hasUser, isOwner } = require('../middlewares/guards');
 const preloader = require('../middlewares/preloader');
-const { create, update, deleteById, vote, getByIdNoLean } = require('../services/postService');
+const { create, update, deleteById, vote, getByIdPopulated } = require('../services/postService');
 
 const postController = require('express').Router();
 
@@ -23,7 +23,7 @@ postController.post('/create', hasUser(), async (req, res) => {
 });
 
 postController.get('/:id', async (req, res) => {
-    const post = postViewModel(await getByIdNoLean(req.params.id));
+    const post = postViewModel(await getByIdPopulated(req.params.id));
 
     if (req.user) {
         post.isAuthor = post.author._id == req.user._id;
@@ -56,7 +56,7 @@ postController.get('/:id/delete', hasUser(), preloader(), isOwner(), async (req,
 
 postController.get('/:id/vote/:rate', hasUser(), async (req, res) => {
     const rate = req.params.rate == 'up' ? 1 : -1;
-    const post = postViewModel(await getByIdNoLean(req.params.id));
+    const post = postViewModel(await getByIdPopulated(req.params.id));
 
     if (post.author._id != req.user._id && post.votes.find(v => v._id == req.user._id) == undefined) {
         await vote(req.params.id, req.user._id, rate);

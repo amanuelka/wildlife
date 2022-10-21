@@ -36,7 +36,4 @@ function voterViewModel(user) {
     }
 };
 
-module.exports = {
-    parseError,
-    postViewModel
-};
+module.exports = { parseError, postViewModel };
