@@ -20,7 +20,7 @@ function isGuest() {
 
 function isOwner() {
     return (req, res, next) => {
-        if (req.user && res.locals.post.author.toString() == req.user._id.toString()) {
+        if (req.user && res.locals.post.author._id == req.user._id) {
             res.locals.isOwner = true;
             next();
         } else {
