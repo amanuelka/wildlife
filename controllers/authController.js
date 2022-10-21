@@ -1,7 +1,7 @@
 const validator = require('validator');
 const { isGuest } = require('../middlewares/guards');
+const { parseError } = require('../middlewares/parser');
 const { register, login } = require('../services/userService');
-const { parseError } = require('../util/parser');
 
 const authController = require('express').Router();
 

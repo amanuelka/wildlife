@@ -43,20 +43,8 @@ function verifyToken(token) {
     return jwt.verify(token, JWT_SECRET);
 }
 
-async function addPost(postId, userId) {
-    const user = await User.findById(userId);
-    user.posts.push(postId);
-    return await user.save();
-};
-
-async function getPopulatedUser(id) {
-    return User.findById(id).populate('posts').lean();
-}
-
 module.exports = {
     register,
     login,
-    verifyToken,
-    addPost,
-    getPopulatedUser
+    verifyToken
 }

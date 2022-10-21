@@ -1,6 +1,6 @@
-const { getAll, getOwn } = require('../services/postService');
 const { hasUser } = require('../middlewares/guards');
-const { postViewModel } = require('../util/parser');
+const { postViewModel } = require('../middlewares/parser');
+const { getAll, getOwn } = require('../services/postService');
 
 const homeController = require('express').Router();
 

@@ -1,8 +1,7 @@
-const { parseError, postViewModel } = require('../util/parser');
+const { parseError, postViewModel } = require('../middlewares/parser');
 const { hasUser, isOwner } = require('../middlewares/guards');
-const { create, update, deleteById, vote, getByIdNoLean } = require('../services/postService');
-const { addPost } = require('../services/userService');
 const preloader = require('../middlewares/preloader');
+const { create, update, deleteById, vote, getByIdNoLean } = require('../services/postService');
 
 const postController = require('express').Router();
 
@@ -16,8 +15,7 @@ postController.post('/create', hasUser(), async (req, res) => {
         if (Object.values(data).some(v => !v)) {
             throw new Error('All fields are required');
         }
-        const post = await create(data);
-        await addPost(post._id, req.user._id);
+        await create(data);
         res.redirect('/posts');
     } catch (error) {
         res.render('create', { errors: parseError(error), ...data });
