@@ -26,14 +26,14 @@ function authorViewModel(user) {
         _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName
-    }
+    };
 };
 
 function voterViewModel(user) {
     return {
         _id: user._id,
         email: user.email
-    }
+    };
 };
 
 module.exports = { parseError, postViewModel };

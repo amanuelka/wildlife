@@ -12,7 +12,7 @@ async function getOwn(userId) {
     return Post.find({ author: userId }).populate('author', 'firstName lastName');
 };
 
-async function getById(id) {
+async function getByIdLeaned(id) {
     return Post.findById(id).lean();
 };
 
@@ -36,4 +36,4 @@ async function vote(postId, userId, rate) {
     return post.save();
 };
 
-module.exports = { create, getAll, getOwn, getById, getByIdPopulated, update, deleteById, vote };
+module.exports = { create, getAll, getOwn, getByIdLeaned, getByIdPopulated, update, deleteById, vote };
