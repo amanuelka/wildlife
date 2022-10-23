@@ -47,4 +47,4 @@ module.exports = {
     register,
     login,
     verifyToken
-}
+};

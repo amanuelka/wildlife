@@ -1,8 +1,10 @@
-const { getByIdPopulated, getByIdLeaned } = require('../services/postService');
+const { getById } = require('../services/postService');
 
-module.exports = (lean) => async (req, res, next) => {
-    res.locals.post = lean
-        ? await getByIdLeaned(req.params.id)
-        : await getByIdPopulated(req.params.id);
-    next();
-};
+function preload() {
+    return async function (req, res, next) {
+        res.locals.post = await getById(req.params.id);
+        next();
+    };
+}
+
+module.exports = preload;

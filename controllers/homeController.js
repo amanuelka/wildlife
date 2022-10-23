@@ -1,5 +1,4 @@
 const { hasUser } = require('../middlewares/guards');
-const { postViewModel } = require('../middlewares/parser');
 const { getAll, getOwn } = require('../services/postService');
 
 const homeController = require('express').Router();
@@ -14,7 +13,7 @@ homeController.get('/posts', async (req, res) => {
 });
 
 homeController.get('/profile', hasUser(), async (req, res) => {
-    const posts = (await getOwn(req.user._id)).map(postViewModel);
+    const posts = await getOwn(req.user._id);
     res.render('my-posts', { posts });
 });
 

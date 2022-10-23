@@ -9,19 +9,20 @@ async function getAll() {
 };
 
 async function getOwn(userId) {
-    return Post.find({ author: userId }).populate('author', 'firstName lastName');
+    return Post.find({ author: userId }).populate('author', 'firstName lastName').lean();
 };
 
-async function getByIdLeaned(id) {
+async function getById(id) {
     return Post.findById(id).lean();
-};
+}; 
 
 async function getByIdPopulated(id) {
-    return Post.findById(id).populate('author', 'firstName lastName').populate('votes', 'email');
-};
+    return Post.findById(id).populate('author', 'firstName lastName').populate('votes', 'email').lean();
+}; 
 
-async function update(post, data) {
-    const updatedPost = Object.assign(post, data);
+async function update(id, data) {
+    const updatedPost = await Post.findById(id);
+    Object.assign(updatedPost, data);
     return updatedPost.save();
 };
 
@@ -36,4 +37,4 @@ async function vote(postId, userId, rate) {
     return post.save();
 };
 
-module.exports = { create, getAll, getOwn, getByIdLeaned, getByIdPopulated, update, deleteById, vote };
+module.exports = { create, getAll, getOwn, getById, getByIdPopulated, update, deleteById, vote };
