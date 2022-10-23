@@ -27,7 +27,7 @@ postController.get('/:id', async (req, res) => {
 
     if (req.user) {
         post.isAuthor = post.author._id == req.user._id;
-        post.voted = post.votes.find(v => v._id == req.user._id) != undefined;
+        post.voted = post.votes.some(u => u._id == req.user._id);
     }
 
     res.render('details', { ...post });
@@ -57,7 +57,7 @@ postController.get('/:id/vote/:rate', hasUser(), async (req, res) => {
     const rate = req.params.rate == 'up' ? 1 : -1;
     const post = await getByIdPopulated(req.params.id);
 
-    if (post.author._id != req.user._id && post.votes.find(v => v._id == req.user._id) == undefined) {
+    if (post.author._id != req.user._id && post.votes.some(u => u._id == req.user._id) == false) {
         await vote(req.params.id, req.user._id, rate);
     }
     res.redirect(`/post/${req.params.id}`);

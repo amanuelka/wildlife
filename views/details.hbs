@@ -46,7 +46,6 @@
                 <div class="card_vote">
                     <p class="PV">Total rating of votes: {{rating}}</p>
                     </div>
-                    <!-- If there are already people who have cast their vote for the post, separate their emails with a comma and a space ", " -->
                     {{#if votes}}
                         <p class="disc">People who voted for the post - {{#each votes}}{{email}} {{/each}}</p>
                     {{else}}

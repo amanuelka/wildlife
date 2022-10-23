@@ -8,10 +8,6 @@ async function getAll() {
     return Post.find({}).lean();
 };
 
-async function getOwn(userId) {
-    return Post.find({ author: userId }).populate('author', 'firstName lastName').lean();
-};
-
 async function getById(id) {
     return Post.findById(id).lean();
 }; 
@@ -20,10 +16,14 @@ async function getByIdPopulated(id) {
     return Post.findById(id).populate('author', 'firstName lastName').populate('votes', 'email').lean();
 }; 
 
+async function getOwn(userId) {
+    return Post.find({ author: userId }).populate('author', 'firstName lastName').lean();
+};
+
 async function update(id, data) {
-    const updatedPost = await Post.findById(id);
-    Object.assign(updatedPost, data);
-    return updatedPost.save();
+    const post = await Post.findById(id);
+    Object.assign(post, data);
+    return post.save();
 };
 
 async function deleteById(id) {

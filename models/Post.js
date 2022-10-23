@@ -14,10 +14,7 @@ const postSchema = new Schema({
     image: {
         type: String,
         required: true,
-        validate: {
-            validator: (value) => { URL_PATTERN.test(value) },
-            message: 'Image should start with http:// or https://'
-        }
+        match: [URL_PATTERN, 'Image should start with http:// or https://']
     },
     description: { type: String, required: true, maxlength: [8, 'Description cannot be more than 8 characters long'] },
     author: { type: Types.ObjectId, ref: 'User' },
